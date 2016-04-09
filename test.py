@@ -1,11 +1,18 @@
 #!/usr/bin/env python
 
+import os
 import time
 import signal
 import sys
 
 
+def touch(fname, times=None):
+    with open(fname, 'a'):
+        os.utime(fname, times)
+
+
 def sighandler(signum, frame):
+    touch('/vagrant/{0}.pid-{1}'.format(signum, os.getpid()))
     print('[pid:{0}] Received {1}'.format(os.getpid(), signum))
     sys.exit(0)
 
