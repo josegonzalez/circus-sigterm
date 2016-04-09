@@ -71,16 +71,19 @@ The process will respawn as the watcher itself is still running and will restart
 
 ### What's going on
 
+Turns out signals *are* being handled, but the way circus does restarts means that it drops the watcher immediately, without waiting for logging output to be captured and send to the write circus logstream.
 
 It is unclear what signal the `circusctl restart` command sends, but triggering a `circusctl restart WATCHER` is similar to the following `signal` command:
 
 ```shell
+# sends the signal to the watcher
 circusctl signal test 15 # SIGTERM
 ```
 
 Whereas the desired output would be more like the following:
 
 ```shell
+# sends the signal to the processes being watched
 circusctl signal test 15 --children # SIGTERM
 ```
 
