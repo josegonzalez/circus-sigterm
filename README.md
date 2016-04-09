@@ -1,6 +1,6 @@
 # circus-sigterm
 
-A small reproduction for invalid signal passing by circus `0.13`.
+A small reproduction for "by appearances" invalid signal passing by circus `0.13`.
 
 ## requirements
 
@@ -68,6 +68,23 @@ This will have the following type of output:
 ```
 
 The process will respawn as the watcher itself is still running and will restart the process since it cannot detect it anymore.
+
+### What's going on
+
+
+It is unclear what signal the `circusctl restart` command sends, but triggering a `circusctl restart WATCHER` is similar to the following `signal` command:
+
+```shell
+circusctl signal test 15 # SIGTERM
+```
+
+Whereas the desired output would be more like the following:
+
+```shell
+circusctl signal test 15 --children # SIGTERM
+```
+
+The second version results in correct logging output.
 
 ### strace
 
