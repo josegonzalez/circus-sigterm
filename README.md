@@ -48,8 +48,7 @@ Note that there is no final message, simply a lack of progress (the process is a
 
 ```shell
 # inside the vm
-pid=$(ps auxf | grep [p]ython | grep -v bin | awk '{print $2}')
-kill -15 $pid
+kill -15 $(ps auxf | grep [p]ython | grep -v bin | awk '{print $2}')
 ```
 
 This will have the following type of output:
