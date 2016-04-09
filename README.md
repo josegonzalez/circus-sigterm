@@ -32,16 +32,16 @@ vagrant ssh
 Now issue a `circusctl stop`. This will stop the worker with the following output:
 
 ```
-Skipping SIGKILL due to (22, 'Invalid argument')
-Skipping SIGSTOP due to (22, 'Invalid argument')
-Skipping SIG_DFL due to signal number out of range
-sleeping
-sleeping
-sleeping
-sleeping
-sleeping
-sleeping
-sleeping
+[pid:1] Skipping SIGKILL due to (22, 'Invalid argument')
+[pid:1] Skipping SIGSTOP due to (22, 'Invalid argument')
+[pid:1] Skipping SIG_DFL due to signal number out of range
+[pid:1] sleeping
+[pid:1] sleeping
+[pid:1] sleeping
+[pid:1] sleeping
+[pid:1] sleeping
+[pid:1] sleeping
+[pid:1] sleeping
 ```
 
 Note that there is no final message, simply a lack of progress (the process is also stopped). If you instead kill the child process like so:
@@ -54,17 +54,17 @@ kill -15 $(ps auxf | grep [p]ython | grep -v bin | awk '{print $2}')
 This will have the following type of output:
 
 ```
-Skipping SIGKILL due to (22, 'Invalid argument')
-Skipping SIGSTOP due to (22, 'Invalid argument')
-Skipping SIG_DFL due to signal number out of range
-sleeping
-sleeping
-sleeping
-sleeping
-sleeping
-sleeping
-sleeping
-Received 15
+[pid:1] Skipping SIGKILL due to (22, 'Invalid argument')
+[pid:1] Skipping SIGSTOP due to (22, 'Invalid argument')
+[pid:1] Skipping SIG_DFL due to signal number out of range
+[pid:1] sleeping
+[pid:1] sleeping
+[pid:1] sleeping
+[pid:1] sleeping
+[pid:1] sleeping
+[pid:1] sleeping
+[pid:1] sleeping
+[pid:1] Received 15
 ```
 
 The process will respawn as the watcher itself is still running and will restart the process since it cannot detect it anymore.
@@ -81,12 +81,12 @@ This results in the following type of output for a direct `kill` signal:
 
 ```
 Process 7013 attached
-write(1, "sleeping", 8)                 = 8
+write(1, "[pid:1] sleeping", 8)                 = 8
 write(1, "\n", 1)                       = 1
 select(0, NULL, NULL, NULL, {1, 0})     = ? ERESTARTNOHAND (To be restarted if no handler)
 --- SIGPIPE {si_signo=SIGPIPE, si_code=SI_USER, si_pid=6701, si_uid=900} ---
 rt_sigreturn()                          = -1 EINTR (Interrupted system call)
-write(1, "Received 13", 11)             = 11
+write(1, "[pid:1] Received 13", 11)             = 11
 write(1, "\n", 1)                       = 1
 rt_sigaction(SIGINT, {SIG_DFL, [], SA_RESTORER, 0x7ff7e0116340}, {0x45a0f5, [], SA_RESTORER, 0x7ff7e0116340}, 8) = 0
 rt_sigaction(SIGHUP, {SIG_DFL, [], SA_RESTORER, 0x7ff7e0116340}, {0x45a0f5, [], SA_RESTORER, 0x7ff7e0116340}, 8) = 0
@@ -127,10 +127,10 @@ Issuing a `circusctl restart` results in a very different set of logs:
 
 ```
 Process 6979 attached
-write(1, "sleeping", 8)                 = 8
+write(1, "[pid:1] sleeping", 8)                 = 8
 write(1, "\n", 1)                       = 1
 select(0, NULL, NULL, NULL, {1, 0})     = 0 (Timeout)
-write(1, "sleeping", 8)                 = -1 EPIPE (Broken pipe)
+write(1, "[pid:1] sleeping", 8)                 = -1 EPIPE (Broken pipe)
 --- SIGPIPE {si_signo=SIGPIPE, si_code=SI_USER, si_pid=6979, si_uid=900} ---
 rt_sigreturn()                          = -1 EPIPE (Broken pipe)
 write(2, "Traceback (most recent call last"..., 35) = -1 EPIPE (Broken pipe)
@@ -151,7 +151,7 @@ write(2, "main()\n", 7)                 = -1 EPIPE (Broken pipe)
 rt_sigreturn()                          = -1 EPIPE (Broken pipe)
 close(3)                                = 0
 munmap(0x7f0566396000, 4096)            = 0
-write(1, "Received 13", 11)             = -1 EPIPE (Broken pipe)
+write(1, "[pid:1] Received 13", 11)             = -1 EPIPE (Broken pipe)
 --- SIGPIPE {si_signo=SIGPIPE, si_code=SI_USER, si_pid=6979, si_uid=900} ---
 rt_sigreturn()                          = -1 EPIPE (Broken pipe)
 write(2, "\n", 1)                       = -1 EPIPE (Broken pipe)
