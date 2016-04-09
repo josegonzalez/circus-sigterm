@@ -1,6 +1,6 @@
 # circus-sigterm
 
-A small reproduction for invalid signal passing by circus `0.12.1`.
+A small reproduction for invalid signal passing by circus `0.13`.
 
 ## requirements
 
@@ -18,7 +18,7 @@ vagrant up
 This will:
 
 1. Install all python requirements
-2. Install `circus==0.12.1` globally
+2. Install `circus==0.13` globally
 3. Start a watcher for `test.ini`
 
 Logs are written to the `/vagrant` directory in the vm, and thus should persist onto the host operating system.
